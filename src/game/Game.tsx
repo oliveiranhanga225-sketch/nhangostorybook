@@ -4,7 +4,7 @@ import { BGS, SPRITES, type BgKey } from "./assets";
 import { BOOKS, CONTACTS, PHASES } from "./story";
 import type { Book, OnStage, Phase, PhonePhase, ScenePhase } from "./types";
 
-type Screen = { name: "menu" } | { name: "sandbox" } | { name: "play"; index: number; story: boolean };
+type Screen = { name: "menu" | "sandbox" } | { name: "play"; index: number; story: boolean };
 const SAVE = "nhango-progress";
 
 export function Game() {
@@ -24,7 +24,7 @@ export function Game() {
   };
 
   if (screen.name === "play") {
-    const phase = PHASES[screen.index];
+    const phase = PHASES[screen.index]!;
     return (
       <PhasePlayer
         key={phase.id}
@@ -134,13 +134,13 @@ function ScenePlayer({ phase, onExit, onDone }: { phase: ScenePhase; onExit: () 
     let bg: BgKey = firstBg(phase);
     let chars: OnStage[] = [];
     for (let k = 0; k <= i; k++) {
-      const s = phase.steps[k];
+      const s = phase.steps[k]!;
       if (s.bg) bg = s.bg;
       if (s.chars) chars = s.chars;
     }
     return { bg, chars };
   }, [i, phase]);
-  const step = phase.steps[i];
+  const step = phase.steps[i]!;
   const next = () => (i + 1 < phase.steps.length ? setI(i + 1) : onDone());
 
   useEffect(() => {
